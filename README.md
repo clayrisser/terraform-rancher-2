@@ -10,9 +10,8 @@ Please ★ this repo if you found it useful ★ ★ ★
 ## Features
 
 * Supports [AutoSpotting](https://github.com/cristim/autospotting)
-* Automatically registers servers with CloudFlare
+* Automatically registers servers with Route 53
 * Adds letsencrypt certificate to Rancher
-* Tags rancher hosts lifestyle as spot or dedicated
 
 
 ## Dependencies

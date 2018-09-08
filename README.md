@@ -19,6 +19,7 @@ Please ★ this repo if you found it useful ★ ★ ★
 * [AWS CLI](https://aws.amazon.com/cli)
 * [Terraform](https://terraform.io)
 * [GNU Make](https://www.gnu.org/software/make)
+* [Python 3](https://www.python.org)
 
 
 ## Usage

@@ -3,9 +3,14 @@ provider "aws" {
   shared_credentials_file = "~/.aws/credentials"
 }
 
+resource "tls_private_key" "orch" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 resource "aws_key_pair" "ssh_key" {
   key_name   = "${var.name}"
-  public_key = "${file(var.pub_key_path)}"
+  public_key = "${tls_private_key.orch.public_key_openssh}"
 }
 
 data "aws_route53_zone" "public" {
@@ -17,7 +22,7 @@ resource "aws_route53_record" "public" {
   name    = "${var.name}.${var.domain}."
   type    = "A"
   ttl     = "300"
-  records = ["${aws_instance.orch.public_ip}"]
+  records = ["${aws_eip.orch.public_ip}"]
 }
 
 resource "aws_security_group" "node" {
@@ -97,6 +102,9 @@ resource "aws_security_group" "orch" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags {
+    Name = "${var.name}"
+  }
 }
 
 data "aws_ami" "rancheros" {
@@ -115,14 +123,22 @@ data "aws_ami" "rancheros" {
 data "template_file" "cloudconfig" {
   template = "${file("cloud-config.yml")}"
   vars {
-    name            = "${var.name}"
+    docker_version = "${var.docker_version}"
     domain          = "${var.domain}"
+    name            = "${var.name}"
     rancher_version = "${var.rancher_version}"
   }
 }
 
+resource "aws_eip" "orch" {
+  instance = "${aws_instance.orch.id}"
+  vpc      = true
+  tags {
+    Name = "${var.name}"
+  }
+}
+
 resource "aws_instance" "orch" {
-  iam_instance_profile        = "k8s-ec2-route53"
   instance_type               = "${var.instance_type}"
   ami                         = "${data.aws_ami.rancheros.image_id}"
   associate_public_ip_address = true

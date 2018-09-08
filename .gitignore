@@ -7,3 +7,4 @@
 *.crt
 .DS_Store
 terraform.tfvars
+*_rsa

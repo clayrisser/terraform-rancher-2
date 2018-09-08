@@ -19,5 +19,13 @@ variable "volume_size" {
 }
 variable "instance_type" {
   type    = "string"
-  default = "t2.large"
+  default = "t2.medium"
+}
+variable "rancher_version" {
+  type    = "string"
+  default = "latest"
+}
+variable "docker_version" {
+  type    = "string"
+  default = "17.03.3-ce"
 }

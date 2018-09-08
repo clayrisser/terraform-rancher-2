@@ -12,7 +12,7 @@ write_files:
       docker run -d --name rancher \
       -v /var/lib/rancher:/var/lib/rancher \
       -p 80:80 -p 443:443 \
-      ${rancher_version} \
+      rancher/rancher:${rancher_version} \
       --acme-domain ${name}.${domain}
 rancher:
   docker:

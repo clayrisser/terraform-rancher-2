@@ -38,8 +38,11 @@ aws configure
 make orch
 ```
 
-If you want to use [route53](https://aws.amazon.com/route53) instead of [cloudflare](https://www.cloudflare.com), set the `cloudflare_token` to `0`.
-Make sure you save the generated rsa private key so you can ssh into the server. It will be located at `orch/orch_<your_domain>_rsa`.
+If you want to use [route53](https://aws.amazon.com/route53) instead of [cloudflare](https://www.cloudflare.com),
+set the `cloudflare_token` to `0`.
+
+Make sure you save the generated rsa private key so you can ssh into the server.
+It will be located at `orch/orch_<your_domain>_rsa`.
 
 
 ## Support

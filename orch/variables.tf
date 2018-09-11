@@ -29,3 +29,9 @@ variable "docker_version" {
   type    = "string"
   default = "17.03.3-ce"
 }
+variable "cloudflare_token" {
+  type    = "string"
+}
+variable "cloudflare_email" {
+  type    = "string"
+}

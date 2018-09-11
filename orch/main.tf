@@ -1,30 +1,49 @@
+### PROVIDERS ###
 provider "aws" {
   region                  = "${var.region}"
   shared_credentials_file = "~/.aws/credentials"
 }
-
-resource "tls_private_key" "orch" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
+provider "cloudflare" {
+  email = "${var.cloudflare_email}"
+  token = "${var.cloudflare_token}"
 }
 
-resource "aws_key_pair" "ssh_key" {
-  key_name   = "${var.name}"
-  public_key = "${tls_private_key.orch.public_key_openssh}"
-}
 
-data "aws_route53_zone" "public" {
-  name = "${var.domain}"
+### DNS ###
+resource "cloudflare_record" "orch" {
+  count  = "${replace(replace(var.cloudflare_token, "/^$/", "0"), "/..+|[^0]/", "1")}"
+  domain = "${var.domain}"
+  name   = "${var.name}"
+  value  = "${aws_eip.orch.public_ip}"
+  type   = "A"
+  ttl    = "300"
 }
-
-resource "aws_route53_record" "public" {
-  zone_id = "${data.aws_route53_zone.public.zone_id}"
+data "aws_route53_zone" "orch" {
+  count = "${replace(replace(var.cloudflare_token, "/^0?$/", "1"), "/[^1]/", "0")}"
+  name  = "${var.domain}"
+}
+resource "aws_route53_record" "orch" {
+  count   = "${replace(replace(var.cloudflare_token, "/^0?$/", "1"), "/[^1]/", "0")}"
+  zone_id = "${data.aws_route53_zone.orch.zone_id}"
   name    = "${var.name}.${var.domain}."
   type    = "A"
   ttl     = "300"
   records = ["${aws_eip.orch.public_ip}"]
 }
 
+
+### SSH ###
+resource "tls_private_key" "orch" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+resource "aws_key_pair" "ssh_key" {
+  key_name   = "${var.name}"
+  public_key = "${tls_private_key.orch.public_key_openssh}"
+}
+
+
+### FIREWALL ###
 resource "aws_security_group" "node" {
   name        = "node"
   description = "node security group"
@@ -74,7 +93,6 @@ resource "aws_security_group" "node" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
 resource "aws_security_group" "orch" {
   name        = "${var.name}"
   description = "${var.name} security group"
@@ -107,6 +125,23 @@ resource "aws_security_group" "orch" {
   }
 }
 
+
+### SERVER ###
+resource "aws_instance" "orch" {
+  instance_type               = "${var.instance_type}"
+  ami                         = "${data.aws_ami.rancheros.image_id}"
+  associate_public_ip_address = true
+  user_data                   = "${data.template_file.cloudconfig.rendered}"
+  key_name                    = "${aws_key_pair.ssh_key.key_name}"
+  security_groups             = ["${aws_security_group.orch.name}"]
+  root_block_device           = {
+    volume_type = "gp2"
+    volume_size = "${var.volume_size}"
+  }
+  tags {
+    Name = "${var.name}"
+  }
+}
 data "aws_ami" "rancheros" {
   most_recent = true
   owners      = ["605812595337"]
@@ -119,7 +154,6 @@ data "aws_ami" "rancheros" {
     values = ["hvm"]
   }
 }
-
 data "template_file" "cloudconfig" {
   template = "${file("cloud-config.yml")}"
   vars {
@@ -129,26 +163,9 @@ data "template_file" "cloudconfig" {
     rancher_version = "${var.rancher_version}"
   }
 }
-
 resource "aws_eip" "orch" {
   instance = "${aws_instance.orch.id}"
   vpc      = true
-  tags {
-    Name = "${var.name}"
-  }
-}
-
-resource "aws_instance" "orch" {
-  instance_type               = "${var.instance_type}"
-  ami                         = "${data.aws_ami.rancheros.image_id}"
-  associate_public_ip_address = true
-  user_data                   = "${data.template_file.cloudconfig.rendered}"
-  key_name                    = "${aws_key_pair.ssh_key.key_name}"
-  security_groups             = ["${aws_security_group.orch.name}"]
-  root_block_device           = {
-    volume_type = "gp2"
-    volume_size = "${var.volume_size}"
-  }
   tags {
     Name = "${var.name}"
   }

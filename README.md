@@ -10,7 +10,9 @@ Please ★ this repo if you found it useful ★ ★ ★
 ## Features
 
 * Supports [AutoSpotting](https://github.com/cristim/autospotting)
-* Automatically registers servers with Route 53
+* Automatically registers servers with a supported DNS provider
+    * Route 53
+    * CloudFlare
 * Adds letsencrypt certificate to Rancher
 
 
@@ -35,6 +37,8 @@ aws configure
 ```sh
 make orch
 ```
+
+If you want to use [route53](https://aws.amazon.com/route53) instead of [cloudflare](https://www.cloudflare.com), set the `cloudflare_token` to `0`.
 
 
 ## Support

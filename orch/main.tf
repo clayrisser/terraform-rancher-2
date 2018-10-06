@@ -11,7 +11,8 @@ provider "cloudflare" {
 
 ### Node Role ###
 resource "aws_iam_role" "node" {
-  name = "node"
+  name               = "node"
+  description        = "Allows EC2 node instances to call AWS services on your behalf"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",

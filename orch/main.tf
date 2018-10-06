@@ -9,32 +9,6 @@ provider "cloudflare" {
 }
 
 
-### Node Role ###
-resource "aws_iam_role" "node" {
-  name               = "node"
-  description        = "Allows EC2 node instances to call AWS services on your behalf"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-resource "aws_iam_role_policy_attachment" "node" {
-  role       = "${aws_iam_role.node.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-}
-
-
 ### DNS ###
 resource "cloudflare_record" "orch" {
   count  = "${replace(replace(var.cloudflare_token, "/^$/", "0"), "/..+|[^0]/", "1")}"

@@ -6,10 +6,6 @@ variable "name" {
   type    = "string"
   default = "orch"
 }
-variable "pub_key_path" {
-  type    = "string"
-  default = "~/.ssh/id_rsa.pub"
-}
 variable "domain" {
   type    = "string"
 }

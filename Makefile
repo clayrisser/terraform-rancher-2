@@ -17,7 +17,7 @@ init: orch/.terraform servers/.terraform
 
 .PHONY: clean
 clean:
-	-@rm -rf *_rsa */.terraform */*.tfstate* */.*.tfstate* 2>/dev/null || true
+	-@git clean -fXd
 
 orch/.terraform:
 	@cd orch && terraform init

@@ -23,7 +23,7 @@ variable "rancher_version" {
 }
 variable "docker_version" {
   type    = "string"
-  default = "17.03.3-ce"
+  default = "18.09.2-ce"
 }
 variable "cloudflare_token" {
   type    = "string"

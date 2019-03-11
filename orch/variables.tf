@@ -8,6 +8,7 @@ variable "name" {
 }
 variable "domain" {
   type    = "string"
+  default = "codejam.ninja"
 }
 variable "volume_size" {
   type    = "string"

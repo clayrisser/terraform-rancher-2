@@ -28,7 +28,9 @@ variable "docker_version" {
 }
 variable "cloudflare_token" {
   type    = "string"
+  default = "0"
 }
 variable "cloudflare_email" {
   type    = "string"
+  default = "0"
 }

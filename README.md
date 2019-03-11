@@ -34,7 +34,9 @@ aws configure
 ### Setup Orchestration Platform
 
 ```sh
-make orch
+cd orch
+terraform init
+echo yes | terraform apply
 ```
 
 If you want to use [route53](https://aws.amazon.com/route53) instead of [cloudflare](https://www.cloudflare.com),

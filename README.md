@@ -36,7 +36,7 @@ aws configure
 ```sh
 cd orch
 terraform init
-echo yes | terraform apply
+terraform apply
 ```
 
 If you want to use [route53](https://aws.amazon.com/route53) instead of [cloudflare](https://www.cloudflare.com),

@@ -34,7 +34,7 @@ aws configure
 ### Setup Orchestration Platform
 
 ```sh
-cd orch
+cd aws
 terraform init
 terraform apply
 ```

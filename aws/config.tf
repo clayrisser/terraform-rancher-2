@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 terraform {
   backend "s3" {
     bucket = "codejamninja-terraform"
@@ -13,6 +14,23 @@ data "terraform_remote_state" "network" {
     region = "${var.region}"
   }
 }
+=======
+# terraform {
+#   backend "s3" {
+#     bucket = "<SOME_BUCKET>"
+#     key    = "<SOME_DOMAIN>"
+#     region = "<SOME_REGION>"
+#   }
+# }
+# data "terraform_remote_state" "network" {
+#   backend = "s3"
+#   config = {
+#     bucket = "<SOME_BUCKET>"
+#     key    = "${var.name}.${var.domain}/ipa"
+#     region = "${var.region}"
+#   }
+# }
+>>>>>>> master
 provider "aws" {
   region                  = "${var.region}"
   shared_credentials_file = "~/.aws/credentials"

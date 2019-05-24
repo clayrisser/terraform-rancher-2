@@ -5,12 +5,12 @@ resource "aws_instance" "orch" {
   user_data                   = "${data.template_file.cloudconfig.rendered}"
   key_name                    = "${aws_key_pair.ssh_key.key_name}"
   security_groups             = ["${aws_security_group.orch.name}"]
-  root_block_device           = {
+  tags = {
+    Name = "${var.name}"
+  }
+  root_block_device {
     volume_type = "gp2"
     volume_size = "${var.volume_size}"
-  }
-  tags {
-    Name = "${var.name}"
   }
 }
 data "aws_ami" "rancheros" {
@@ -27,7 +27,7 @@ data "aws_ami" "rancheros" {
 }
 data "template_file" "cloudconfig" {
   template = "${file("cloud-config.yml")}"
-  vars {
+  vars = {
     docker_version = "${var.docker_version}"
     domain          = "${var.domain}"
     name            = "${var.name}"
@@ -37,7 +37,7 @@ data "template_file" "cloudconfig" {
 resource "aws_eip" "orch" {
   instance = "${aws_instance.orch.id}"
   vpc      = true
-  tags {
+  tags = {
     Name = "${var.name}"
   }
 }

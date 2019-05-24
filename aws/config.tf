@@ -7,7 +7,7 @@
 # }
 # data "terraform_remote_state" "network" {
 #   backend = "s3"
-#   config {
+#   config = {
 #     bucket = "<SOME_BUCKET>"
 #     key    = "${var.name}.${var.domain}/ipa"
 #     region = "${var.region}"

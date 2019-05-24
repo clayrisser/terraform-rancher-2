@@ -7,7 +7,7 @@ terraform {
 }
 data "terraform_remote_state" "network" {
   backend = "s3"
-  config {
+  config = {
     bucket = "codejamninja-terraform"
     key    = "${var.name}.${var.domain}/orch"
     region = "${var.region}"

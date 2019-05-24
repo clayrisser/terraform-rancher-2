@@ -1,7 +1,7 @@
 resource "aws_security_group" "node" {
   name        = "node"
   description = "node security group"
-  tags {
+  tags = {
     Name = "node"
   }
   ingress {
@@ -74,7 +74,7 @@ resource "aws_security_group" "orch" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags {
+  tags = {
     Name = "${var.name}"
   }
 }

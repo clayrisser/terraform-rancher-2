@@ -2,6 +2,8 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/codejamninja/terraform-rancher.svg?style=social&label=Stars)](https://github.com/codejamninja/terraform-rancher)
 
+![](assets/terraform-rancher2.png)
+
 > Initialize rancher 2 with terraform
 
 Please ★ this repo if you found it useful ★ ★ ★
